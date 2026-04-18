@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { ErrorBoundary } from '../src/components/ErrorBoundary';
 
@@ -13,6 +13,10 @@ const Stable = () => <div>All good</div>;
 // Suppress expected console.error noise from React's error handling in tests
 beforeEach(() => {
   vi.spyOn(console, 'error').mockImplementation(() => {});
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
 });
 
 describe('ErrorBoundary', () => {
