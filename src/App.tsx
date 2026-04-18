@@ -76,6 +76,7 @@ import DocumentViewerPage from './pages/document-viewer';
 import NDAAdminPage from './pages/nda-admin';
 import { AuthSessionProvider, useAuthSession } from './auth/AuthSessionProvider';
 import AuthRequiredRoute from './components/AuthRequiredRoute';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import HushhHackathonPage from './pages/hushh-hackathon/ui';
 import MetricsPage from './pages/metrics';
 
@@ -358,25 +359,39 @@ function App() {
             <Route path='/developer-docs' element={<DeveloperDocsPage />} />
             <Route path='/metrics' element={<MetricsPage />} />
             <Route path='/metric' element={<Navigate to='/metrics' replace />} />
-            <Route path='/hushh-ai' element={<HushhAIPage />} />
+            <Route path='/hushh-ai' element={
+              <ErrorBoundary moduleName="Hushh AI">
+                <HushhAIPage />
+              </ErrorBoundary>
+            } />
             <Route path='/hushh-ai/login' element={<HushhAILoginPage />} />
             <Route path='/hushh-ai/signup' element={<HushhAISignupPage />} />
             {/* Kai - Financial Intelligence Agent */}
             {/* Real-time AI voice/video financial advisor powered by Gemini 2.0 Flash */}
-            <Route path='/kai' element={<KaiApp />} />
+            <Route path='/kai' element={
+              <ErrorBoundary moduleName="Kai">
+                <KaiApp />
+              </ErrorBoundary>
+            } />
             {/* Kai India - Indian Market Intelligence Dashboard */}
             {/* Real-time NSE/BSE market data powered by Gemini 2.5 Flash with Google Search */}
             <Route
               path='/kai-india'
               element={
-                <Suspense fallback={<div className="min-h-screen bg-black" />}>
-                  <KaiIndiaApp />
-                </Suspense>
+                <ErrorBoundary moduleName="Kai India">
+                  <Suspense fallback={<div className="min-h-screen bg-black" />}>
+                    <KaiIndiaApp />
+                  </Suspense>
+                </ErrorBoundary>
               }
             />
             {/* Hushh Studio - FREE AI Video Generation */}
             {/* Powered by Google Veo 3.1 - No login required, free for Indian audience */}
-            <Route path='/studio' element={<HushhStudioApp />} />
+            <Route path='/studio' element={
+              <ErrorBoundary moduleName="Hushh Studio">
+                <HushhStudioApp />
+              </ErrorBoundary>
+            } />
             {/* Global NDA Signing Page */}
             <Route path='/sign-nda' element={<SignNDAPage />} />
             <Route path='/document-viewer' element={<DocumentViewerPage />} />
@@ -397,9 +412,11 @@ function App() {
           <GoogleAnalyticsRouteTracker />
           <ScrollToTop />
           <OnboardingShellAutoPadding />
-          <GlobalNDAGate>
-            <AppLayout />
-          </GlobalNDAGate>
+          <ErrorBoundary moduleName="Hushh">
+            <GlobalNDAGate>
+              <AppLayout />
+            </GlobalNDAGate>
+          </ErrorBoundary>
         </Router>
       </AuthSessionProvider>
     </ChakraProvider>
