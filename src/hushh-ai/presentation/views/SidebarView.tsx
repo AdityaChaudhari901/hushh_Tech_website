@@ -10,7 +10,7 @@ import { Chat } from '../../domain/entities';
 import { MediaLimits } from '../../domain/repositories';
 import { THEME, BRANDING } from '../../core/constants';
 
-const MotionBox = motion(Box);
+const MotionBox = motion.create(Box);
 
 interface SidebarViewProps {
   isOpen: boolean;

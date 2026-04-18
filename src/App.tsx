@@ -393,7 +393,7 @@ function App() {
   return (
     <ChakraProvider theme={theme}>
       <AuthSessionProvider>
-        <Router>
+        <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <GoogleAnalyticsRouteTracker />
           <ScrollToTop />
           <OnboardingShellAutoPadding />

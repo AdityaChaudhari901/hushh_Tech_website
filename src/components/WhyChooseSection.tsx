@@ -15,8 +15,8 @@ import { FaEye, FaLock, FaPercent } from "react-icons/fa";
 import { MdAnalytics, MdPsychology, MdSmartToy, MdVerifiedUser } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 
-const MotionBox = motion(Box);
-const MotionButton = motion(Button);
+const MotionBox = motion.create(Box);
+const MotionButton = motion.create(Button);
 
 const appleEase: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94];
 

@@ -24,9 +24,9 @@ import { useNavigate } from "react-router-dom";
 import { getContinueOnboardingCta } from "../../services/onboarding/flow";
 
 // Motion components
-const MotionBox = motion(Box);
-const MotionButton = motion(Button);
-const MotionFlex = motion(Flex);
+const MotionBox = motion.create(Box);
+const MotionButton = motion.create(Button);
+const MotionFlex = motion.create(Flex);
 
 // Apple-like easing curve - typed as tuple for framer-motion compatibility
 const appleEase: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94];

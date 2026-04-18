@@ -12,7 +12,7 @@ import { useLocation } from 'react-router-dom';
  */
 
 // Create motion components
-const MotionBox = motion(Box);
+const MotionBox = motion.create(Box);
 
 export default function FloatingContactBubble() {
   const location = useLocation();

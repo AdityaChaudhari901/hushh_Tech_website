@@ -14,7 +14,7 @@ import config from '../../resources/config/config';
 import { trackProductUsage, PRODUCTS } from '../../services/productUsage/trackProductUsage';
 import DeleteAccountModal from '../../components/DeleteAccountModal';
 
-const MotionBox = motion(Box);
+const MotionBox = motion.create(Box);
 
 // ============================================
 // Storage Keys for Caching
