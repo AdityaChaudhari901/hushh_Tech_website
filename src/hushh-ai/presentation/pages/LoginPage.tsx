@@ -90,7 +90,7 @@ export default function HushhAILoginPage() {
       if (session) {
         navigate("/hushh-ai");
       }
-    });
+    }).catch(console.error);
 
     const {
       data: { subscription },

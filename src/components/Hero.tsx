@@ -174,7 +174,7 @@ export default function Hero() {
 
     config.supabaseClient.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
-    });
+    }).catch(console.error);
 
     const { data: { subscription } } = config.supabaseClient.auth.onAuthStateChange((_event, session) => {
       setSession(session);

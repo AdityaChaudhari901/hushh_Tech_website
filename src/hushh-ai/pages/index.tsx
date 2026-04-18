@@ -130,7 +130,7 @@ export default function HushhAIPage() {
             setPersistedChatId(null);
             navigate('/hushh-ai/login');
           }
-        });
+        }).catch(console.error);
         return;
       }
 
