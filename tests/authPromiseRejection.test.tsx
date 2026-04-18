@@ -50,6 +50,23 @@ vi.mock('../src/components/hushh-tech-footer/HushhTechFooter', () => ({
   default: () => React.createElement('div', null, 'footer'),
 }));
 
+vi.mock('../src/auth/AuthSessionProvider', () => ({
+  useAuthSession: () => ({ status: 'anonymous', startOAuth: vi.fn() }),
+  AuthSessionProvider: ({ children }: { children: React.ReactNode }) => children,
+}));
+
+// ─── Mock: hushhAI service (used by HushhAIPage) ──────────────────────────────
+const isAuthenticatedMock = vi.fn();
+const onAuthChangeMock = vi.fn(() => () => {});
+
+vi.mock('../src/hushh-ai/services/hushhAIService', () => ({
+  isAuthenticated: () => isAuthenticatedMock(),
+  onAuthChange: () => onAuthChangeMock(),
+  getChats: () => Promise.resolve([]),
+  getOrCreateUser: () => Promise.resolve(null),
+  getMediaLimits: () => Promise.resolve(null),
+}));
+
 // ─── Helper ───────────────────────────────────────────────────────────────────
 const wrap = (component: React.ReactElement) =>
   React.createElement(
@@ -74,7 +91,11 @@ describe('auth path promise rejection handling', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    // Default: isAuthenticated resolves false (unauthenticated, no redirect loop)
+    isAuthenticatedMock.mockResolvedValue(false);
     Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
+
+    Element.prototype.scrollIntoView = vi.fn();
 
     Object.defineProperty(window, 'matchMedia', {
       configurable: true,
@@ -148,6 +169,25 @@ describe('auth path promise rejection handling', () => {
       await flush();
 
       expect(consoleErrorSpy).toHaveBeenCalledWith(networkError);
+    });
+  });
+
+  describe('HushhAIPage — cached auth background verification', () => {
+    it('logs the error when background isAuthenticated rejects', async () => {
+      const networkError = new Error('service unreachable');
+      // Simulate cached auth (fast path) so the background verify runs
+      sessionStorage.setItem('hushh_ai_auth_cached', 'true');
+      isAuthenticatedMock.mockRejectedValue(networkError);
+
+      const HushhAIPage = (await import('../src/hushh-ai/pages/index')).default;
+
+      await act(async () => {
+        root.render(wrap(React.createElement(HushhAIPage)));
+      });
+      await flush();
+
+      expect(consoleErrorSpy).toHaveBeenCalledWith(networkError);
+      sessionStorage.removeItem('hushh_ai_auth_cached');
     });
   });
 
